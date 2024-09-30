@@ -1,4 +1,8 @@
 #!/bin/bash
+#SBATCH -A standby
+#SBATCH --nodes=1
+#SBATCH --gpus-per-node=1
+
 echo "--------------------------------------------------"
 echo "loading modules"
 source /etc/profile.d/modules.sh
