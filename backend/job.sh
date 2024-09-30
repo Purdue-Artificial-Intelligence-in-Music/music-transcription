@@ -10,19 +10,19 @@ module load ffmpeg
 
 echo "--------------------------------------------------"
 echo "creating conda environment"
-conda create -n test310 python=3.10 --yes
+conda env create -f environment.yml -n testing-env
 
-conda activate test310
-echo "--------------------------------------------------"
-echo "conda installing pytorch"
-conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia --yes
-echo "--------------------------------------------------"
-echo "pip installing tensorflow"
-python3 -m pip install tensorflow[and-cuda] --quiet
+conda activate testing-env
+# echo "--------------------------------------------------"
+# echo "conda installing pytorch"
+# conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia --yes
+# echo "--------------------------------------------------"
+# echo "pip installing tensorflow"
+# python3 -m pip install tensorflow[and-cuda] --quiet
 
-echo "--------------------------------------------------"
-echo "pip installing requirements"
-python3 -m pip install -r requirements.txt --quiet
+# echo "--------------------------------------------------"
+# echo "pip installing requirements"
+# python3 -m pip install -r requirements.txt --quiet
 
 for FILE in /home/zhao1322/test/test-files/*; do
     filename=$(basename "$FILE")
@@ -31,6 +31,11 @@ for FILE in /home/zhao1322/test/test-files/*; do
     echo "TESTING ON ${filename}"
     python main.py -i /home/zhao1322/test/test-files/$filename -o /home/zhao1322/test/out/$filename_no_ext.mid
 done
+
+echo "--------------------------------------------------"
+echo "cleaning up environment"
+cd ..
+
 conda deactivate
-conda env remove -n test310 --yes
+conda env remove -n testing-env --yes
 conda clean --all --yes
