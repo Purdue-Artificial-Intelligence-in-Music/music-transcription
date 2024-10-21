@@ -31,7 +31,7 @@ def execute_cmd(cmd):
     
     return output
 
-def queue_project(project_folder):
+def queue_project(project_folder, dependency=""):
 
     project_path = '/home/zhao1322/test/' + project_folder
 
@@ -42,7 +42,10 @@ def queue_project(project_folder):
     scp.put("scoring.sh", remote_path=project_path)
 
     print("Queuing SLURM Job")
-    out = execute_cmd(f'cd {project_path}; sbatch job.sh')
+    if dependency:
+        out = execute_cmd(f'cd {project_path}; sbatch --dependency=afterany:{dependency} job.sh')
+    else:
+        out = execute_cmd(f'cd {project_path}; sbatch job.sh')
     
     slurm_id = out.split(" ")[-1].strip()
     
@@ -60,8 +63,5 @@ def queue_project(project_folder):
     
     return slurm_id
     
-
-queue_project('example_submission-mt3')
-print("project queued")
 scp.close()
 client.close()
