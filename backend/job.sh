@@ -17,16 +17,6 @@ echo "creating conda environment"
 conda env create -f environment.yml -n testing-env
 
 conda activate testing-env
-# echo "--------------------------------------------------"
-# echo "conda installing pytorch"
-# conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia --yes
-# echo "--------------------------------------------------"
-# echo "pip installing tensorflow"
-# python3 -m pip install tensorflow[and-cuda] --quiet
-
-# echo "--------------------------------------------------"
-# echo "pip installing requirements"
-# python3 -m pip install -r requirements.txt --quiet
 
 for FILE in /home/zhao1322/test/test-files/*; do
     filename=$(basename "$FILE")

@@ -1,6 +1,5 @@
 from paramiko import SSHClient
 from scp import SCPClient
-import time
 
 client = SSHClient()
 client.load_host_keys("/Users/vincentzhao/.ssh/known_hosts")
@@ -35,11 +34,11 @@ def queue_project(project_folder, dependency=""):
 
     project_path = '/home/zhao1322/test/' + project_folder
 
-    scp.put(project_folder, recursive=True, remote_path='/home/zhao1322/test')
+    # scp.put(project_folder, recursive=True, remote_path='/home/zhao1322/test')
 
     scp.put("job.sh", remote_path=project_path)
     scp.put("cleanup.sh", remote_path=project_path)
-    scp.put("scoring.sh", remote_path=project_path)
+    # scp.put("scoring.sh", remote_path=project_path)
 
     print("Queuing SLURM Job")
     if dependency:
@@ -51,7 +50,7 @@ def queue_project(project_folder, dependency=""):
     
     print("Queuing scoring")
     
-    out = execute_cmd(f'cd {project_path}; sbatch --dependency=afterany:{slurm_id} scoring.sh')
+    out = execute_cmd(f'cd /home/zhao1322/test; sbatch --dependency=afterany:{slurm_id} scoring.sh')
     
     slurm_id = out.split(" ")[-1].strip()
     
@@ -62,6 +61,7 @@ def queue_project(project_folder, dependency=""):
     print("slurm id", slurm_id)
     
     return slurm_id
-    
+queue_project('example_submission-mt3')
+print("project queued")
 scp.close()
 client.close()
